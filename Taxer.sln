@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{51B75ACC-2F32-4A03-A891-F063B8ADBE7C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{72233C56-E698-4132-8350-4ACEFA4DE4BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxer.Core", "src\Taxer.Core\Taxer.Core.csproj", "{E5AF3592-7F70-447D-8A2A-83C4111BE6A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxer.Functions", "src\Taxer.Functions\Taxer.Functions.csproj", "{1376F071-61C8-4D59-9077-324F7DE4717E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{819B1E88-3B1E-47DC-A9A8-17AF8B08CAA8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxer.FakturoidAdapter", "src\Adapters\Taxer.FakturoidAdapter\Taxer.FakturoidAdapter.csproj", "{FCD87C07-332E-4840-8051-191F695098F9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxer.InMemoryAdapter", "src\Adapters\Taxer.InMemoryAdapter\Taxer.InMemoryAdapter.csproj", "{17AC53A1-FB58-4BFD-A142-24F467349E82}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taxer.Tests", "test\Taxer.Tests\Taxer.Tests.csproj", "{85E39331-1D48-4749-9DFC-1ACD8D20805F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "references", "references", "{8C2208C9-1541-4435-8924-DA4F940550FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altairis.Fakturoid.Client", "references\FakturoidAPI\Altairis.Fakturoid.Client\Altairis.Fakturoid.Client.csproj", "{0817AD5F-3092-4916-AFBD-4431823D46D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taxer.Domain", "src\Taxer.Domain\Taxer.Domain.csproj", "{A9B3749C-FDCB-4311-A8B4-AF5499915CEC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5AF3592-7F70-447D-8A2A-83C4111BE6A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5AF3592-7F70-447D-8A2A-83C4111BE6A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5AF3592-7F70-447D-8A2A-83C4111BE6A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5AF3592-7F70-447D-8A2A-83C4111BE6A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1376F071-61C8-4D59-9077-324F7DE4717E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1376F071-61C8-4D59-9077-324F7DE4717E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1376F071-61C8-4D59-9077-324F7DE4717E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1376F071-61C8-4D59-9077-324F7DE4717E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD87C07-332E-4840-8051-191F695098F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD87C07-332E-4840-8051-191F695098F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD87C07-332E-4840-8051-191F695098F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD87C07-332E-4840-8051-191F695098F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17AC53A1-FB58-4BFD-A142-24F467349E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17AC53A1-FB58-4BFD-A142-24F467349E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17AC53A1-FB58-4BFD-A142-24F467349E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17AC53A1-FB58-4BFD-A142-24F467349E82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85E39331-1D48-4749-9DFC-1ACD8D20805F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85E39331-1D48-4749-9DFC-1ACD8D20805F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85E39331-1D48-4749-9DFC-1ACD8D20805F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85E39331-1D48-4749-9DFC-1ACD8D20805F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0817AD5F-3092-4916-AFBD-4431823D46D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0817AD5F-3092-4916-AFBD-4431823D46D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0817AD5F-3092-4916-AFBD-4431823D46D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0817AD5F-3092-4916-AFBD-4431823D46D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9B3749C-FDCB-4311-A8B4-AF5499915CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9B3749C-FDCB-4311-A8B4-AF5499915CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9B3749C-FDCB-4311-A8B4-AF5499915CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9B3749C-FDCB-4311-A8B4-AF5499915CEC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E5AF3592-7F70-447D-8A2A-83C4111BE6A5} = {51B75ACC-2F32-4A03-A891-F063B8ADBE7C}
+		{1376F071-61C8-4D59-9077-324F7DE4717E} = {51B75ACC-2F32-4A03-A891-F063B8ADBE7C}
+		{819B1E88-3B1E-47DC-A9A8-17AF8B08CAA8} = {51B75ACC-2F32-4A03-A891-F063B8ADBE7C}
+		{FCD87C07-332E-4840-8051-191F695098F9} = {819B1E88-3B1E-47DC-A9A8-17AF8B08CAA8}
+		{17AC53A1-FB58-4BFD-A142-24F467349E82} = {819B1E88-3B1E-47DC-A9A8-17AF8B08CAA8}
+		{85E39331-1D48-4749-9DFC-1ACD8D20805F} = {72233C56-E698-4132-8350-4ACEFA4DE4BF}
+		{0817AD5F-3092-4916-AFBD-4431823D46D3} = {8C2208C9-1541-4435-8924-DA4F940550FF}
+		{A9B3749C-FDCB-4311-A8B4-AF5499915CEC} = {51B75ACC-2F32-4A03-A891-F063B8ADBE7C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5A9EFA79-E4DD-4598-A9E3-BD572AFDB4C0}
+	EndGlobalSection
+EndGlobal

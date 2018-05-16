@@ -1,0 +1,6 @@
+[submodule "referencesFakturoidAPI"]
+	path = referencesFakturoidAPI
+	url = https://github.com/Remiiik/Fakturoid-API.git
+[submodule "references/FakturoidAPI"]
+	path = references/FakturoidAPI
+	url = https://github.com/Remiiik/Fakturoid-API.git

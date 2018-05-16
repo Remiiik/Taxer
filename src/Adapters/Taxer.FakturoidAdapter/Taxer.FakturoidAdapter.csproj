@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Taxer.FakturoidAdapter</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\references\FakturoidAPI\Altairis.Fakturoid.Client\Altairis.Fakturoid.Client.csproj" />
+    <ProjectReference Include="..\..\Taxer.Core\Taxer.Core.csproj" />
+  </ItemGroup>
+
+</Project>
