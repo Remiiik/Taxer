@@ -1,5 +1,6 @@
 ﻿using Taxer.Core.Export;
 using Taxer.Domain.KH;
+using Taxer.Domain.Shared;
 
 namespace Taxer.InMemoryAdapter
 {
@@ -90,9 +91,9 @@ namespace Taxer.InMemoryAdapter
             };
         }
 
-        private KHSubject CreateSubjectInfo()
+        private Subject CreateSubjectInfo()
         {
-            return new KHSubject
+            return new Subject
             {
                 Country = "ČESKÁ REPUBLIKA",
                 Street = "street",

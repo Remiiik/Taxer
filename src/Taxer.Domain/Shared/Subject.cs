@@ -1,9 +1,9 @@
 using System.Xml.Serialization;
 
-namespace Taxer.Domain.KH
+namespace Taxer.Domain.Shared
 {
     [XmlRoot(ElementName = "VetaP")]
-    public class KHSubject
+    public class Subject
     {
         [XmlAttribute(AttributeName = "typ_ds")]
         public string SubjectType { get; set; } = "F";

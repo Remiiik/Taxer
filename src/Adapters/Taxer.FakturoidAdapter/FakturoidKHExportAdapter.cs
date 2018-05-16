@@ -8,11 +8,11 @@ using Taxer.Domain.Shared;
 
 namespace Taxer.FakturoidAdapter
 {
-    public class FakturoidExportSourceClient : IKHExportSourceAdapter
+    public class FakturoidKHExportAdapter : IKHExportSourceAdapter
     {
         private readonly FakturoidConfiguration _connectConfig;
 
-        public FakturoidExportSourceClient(FakturoidConfiguration connectConfig)
+        public FakturoidKHExportAdapter(FakturoidConfiguration connectConfig)
         {
             _connectConfig = connectConfig;
         }
@@ -66,11 +66,11 @@ namespace Taxer.FakturoidAdapter
             };
         }
 
-        private KHSubject CreateSubject(FakturoidContext context, ExportSetup setup)
+        private Subject CreateSubject(FakturoidContext context, ExportSetup setup)
         {
             var client = context.GetAccountInfo();
 
-            return new KHSubject
+            return new Subject
             {
                 FirstName = client.name.Split(' ').First(),
                 Surname = client.name.Split(' ').Last(),
@@ -127,23 +127,15 @@ namespace Taxer.FakturoidAdapter
 
             return new KHSmallExpenses
             {
-                PriceWithoutTaxH = GetTotalWithVAT(expenses, 21),
-                PriceTaxH = GetVAT(expenses, 21),
-                PriceWithoutTaxL = GetTotalWithVAT(expenses, 15),
-                PriceTaxL = GetVAT(expenses, 15),
+                PriceWithoutTaxH = expenses.GetTotalWithoutVAT(21),
+                PriceTaxH = expenses.GetVAT(21),
+                PriceWithoutTaxL = expenses.GetTotalWithoutVAT(15),
+                PriceTaxL = expenses.GetVAT(15),
                 //PriceWithoutTaxN = GetTotalWithVAT(expenses, 0),
                 //PriceTaxN = GetVAT(expenses, 0),
             };
         }
 
-        private static decimal GetTotalWithVAT(IEnumerable<JsonExpense> expenses, int vatRate)
-        {
-            return Decimal.Round(expenses.SelectMany(s => s.lines).Where(w => w.vat_rate == vatRate).Sum(u => u.quantity * u.unit_price), 2);
-        }
-
-        private static decimal GetVAT(IEnumerable<JsonExpense> expenses, int vatRate)
-        {
-            return Decimal.Round(expenses.SelectMany(s => s.lines).Where(w => w.vat_rate == vatRate).Sum(u => u.quantity * u.unit_price * u.vat_rate / (decimal)100.0), 2);
-        }
+       
     }
 }

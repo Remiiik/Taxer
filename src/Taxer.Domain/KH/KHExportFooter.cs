@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using Taxer.Domain.Shared;
 
 namespace Taxer.Domain.KH
 {

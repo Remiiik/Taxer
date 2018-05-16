@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace Taxer.Domain.KH
+namespace Taxer.Domain.Shared
 {
     [XmlRoot(ElementName = "Soubor")]
     public class FileInfo
