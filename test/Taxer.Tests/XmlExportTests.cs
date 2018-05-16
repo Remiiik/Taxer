@@ -15,11 +15,9 @@ namespace Taxer.Tests
             {
                 Year = 2018,
                 Month = 4,
-                AccountName = "accountName",
-                AppKey = "appKey",
-                Login = "login"
+                OfficeNo = "461",
+                OfficeDepartmentNo = "3002"
             };
         }
-
     }
 }

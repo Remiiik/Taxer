@@ -10,9 +10,16 @@ namespace Taxer.FakturoidAdapter
 {
     public class FakturoidExportSourceClient : IKHExportSourceAdapter
     {
+        private readonly FakturoidConfiguration _connectConfig;
+
+        public FakturoidExportSourceClient(FakturoidConfiguration connectConfig)
+        {
+            _connectConfig = connectConfig;
+        }
+
         public KHExportSheet GetExportForPeriod(ExportSetup setup)
         {
-            var context = new FakturoidContext(setup.AccountName, setup.Login, setup.AppKey, "Fakturoid API v2 C#/.NET Client Demo Application (fakturoid@rider.cz)");
+            var context = new FakturoidContext(_connectConfig.AccountName, _connectConfig.Login, _connectConfig.Key, "Fakturoid API v2 C#/.NET Client Demo Application (fakturoid@rider.cz)");
 
             var sheet = new KHExportSheet();
 
@@ -74,7 +81,7 @@ namespace Taxer.FakturoidAdapter
                 VATNumber = client.vat_no.Replace("CZ", ""),
                 Zip = client.zip,
                 AuthorityOfficeNumber = setup.OfficeNo,
-                AuthorityOffice2 = setup.OfficeDepartment,
+                AuthorityOffice2 = setup.OfficeDepartmentNo,
                 Phone = client.phone,
             };
         }

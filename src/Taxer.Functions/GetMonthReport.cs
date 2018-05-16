@@ -1,9 +1,11 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using Newtonsoft.Json;
 using Taxer.Core.Export;
 using Taxer.Core.Infrastructure;
 using Taxer.FakturoidAdapter;
@@ -12,35 +14,69 @@ namespace Taxer.Functions
 {
     public static class KHReports
     {
-        [FunctionName("GetMonthReport")]
-        public static IActionResult GetMonthReport([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetMonthReport/key/{key}/accountname/{accountname}/login/{login}/year/{year}/month/{month}")]HttpRequest req, string key, string accountName, string login, int year, int month, TraceWriter log)
+        [FunctionName("KHMonthReportPost")]
+        public static async Task<IActionResult> KHMonthReportPost([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "KHMonthReportPost")]HttpRequest req, TraceWriter log)
         {
-            log.Info("Function started");
+            var bodyString = await req.ReadAsStringAsync();
+            var dto = JsonConvert.DeserializeObject<KHExportDto>(bodyString);
 
-            IActionResult check = null
-                                  ?? CheckParam(accountName, nameof(accountName))
-                                  ?? CheckParam(login, nameof(login))
-                                  ?? CheckParam(key, nameof(key))
-                                  ?? CheckParam(month, nameof(month), i => i >= 1 && i <= 12)
-                                  ?? CheckParam(year, nameof(year), i => i >= 2000 && i <= 2030);
+            return GetMonthReport(dto, log);
+        }
+
+
+        [FunctionName("KHMonthReportGet")]
+        public static IActionResult KHMonthReportGet(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route =
+                "KHMonthReportGet/key/{key}/accountname/{accountname}/login/{login}/year/{year}/month/{month}")]
+            HttpRequest req,
+            string key,
+            string accountName,
+            string login,
+            int year,
+            int month,
+            TraceWriter log)
+        {
+            return GetMonthReport(new KHExportDto
+            {
+                Key = key,
+                AccountName = accountName,
+                Login=login,
+                Year = year,
+                Month = month,
+                OfficeDepartmentId = 3002,
+                OfficeNo = 461
+            }, log);
+        }
+
+        private static IActionResult GetMonthReport(KHExportDto exportDto, TraceWriter log)
+        {
+
+            log.Info("Function started");
+            IActionResult check = ValidateDto(exportDto);
 
             if (check != null)
                 return check;
 
             var setup = new ExportSetup()
             {
-                Year = year,
-                Month = month,
-                AccountName = accountName,
-                AppKey = key,
-                Login = login
+                Year = exportDto.Year,
+                Month = exportDto.Month,
+                OfficeDepartmentNo = exportDto.OfficeDepartmentId.ToString(),
+                OfficeNo = exportDto.OfficeNo.ToString()
+            };
+
+            var connectConfig = new FakturoidConfiguration()
+            {
+                AccountName = exportDto.AccountName,
+                Key = exportDto.Key,
+                Login = exportDto.Login
             };
 
 
             var exporter = new XmlGenerator();
 
             log.Info("Export started");
-            var exportedData = new FakturoidExportSourceClient().GetExportForPeriod(setup);
+            var exportedData = new FakturoidExportSourceClient(connectConfig).GetExportForPeriod(setup);
             log.Info("Data exported");
 
             string xml = exporter.Generate(exportedData);
@@ -49,7 +85,15 @@ namespace Taxer.Functions
             return new OkObjectResult(xml);
         }
 
-
+        private static IActionResult ValidateDto(KHExportDto dto)
+        {
+            return null
+                  ?? CheckParam(dto.AccountName, nameof(KHExportDto.AccountName))
+                  ?? CheckParam(dto.Login, nameof(KHExportDto.Login))
+                  ?? CheckParam(dto.Key, nameof(KHExportDto.Key))
+                  ?? CheckParam(dto.Month, nameof(KHExportDto.Month), i => i >= 1 && i <= 12)
+                  ?? CheckParam(dto.Year, nameof(KHExportDto.Year), i => i >= 2000 && i <= 2030);
+        }
 
         private static IActionResult CheckParam(string paramValue, string paramName)
         {
@@ -66,5 +110,16 @@ namespace Taxer.Functions
 
             return null;
         }
+    }
+
+    internal class KHExportDto
+    {
+        public string Login { get; set; }
+        public string Key { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public string AccountName { get; set; }
+        public int OfficeDepartmentId  { get; set; }
+        public int OfficeNo { get; set; }
     }
 }
