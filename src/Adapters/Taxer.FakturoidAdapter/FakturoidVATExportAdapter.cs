@@ -64,7 +64,8 @@ namespace Taxer.FakturoidAdapter
             return new VATPeriodInfo
             {
                 ExportDate = DateTime.Now.Date.ToString("dd.MM.yyyy"),
-                Month = setup.Month,
+                Month = setup.ExportMode == ExportMode.Month ? new int?(setup.Period) : null,
+                Quarter = setup.ExportMode == ExportMode.Quarter ? new int?(setup.Period) : null,
                 Year = setup.Year,
             };
         }
@@ -91,9 +92,8 @@ namespace Taxer.FakturoidAdapter
 
         private VATInvoiced CreateInvoiced(FakturoidContext context, ExportSetup setup)
         {
-            var referenceDate = new DateTime(setup.Year, setup.Month, 1);
             var invoices = context.Invoices.Select()
-                .Where(w => w.issued_on >= referenceDate && w.issued_on < referenceDate.AddMonths(1));
+                .Where(w => w.issued_on >= setup.GetReferenceDate() && w.issued_on < setup.GetEndDate()).ToList();
 
             return new VATInvoiced
             {
@@ -103,13 +103,11 @@ namespace Taxer.FakturoidAdapter
                 TaxL = Decimal.Round(invoices.GetVAT(FakturoidExtensions.VAT_RATE_LOW), 0),
             };
         }
-
+       
 
         private VATReceived CreateReceived(FakturoidContext context, ExportSetup setup)
         {
-            var referenceDate = new DateTime(setup.Year, setup.Month, 1);
-
-            var expenses = context.Expenses.Select().Where(w => w.issued_on >= referenceDate && w.issued_on < referenceDate.AddMonths(1));
+            var expenses = context.Expenses.Select().Where(w => w.issued_on >= setup.GetReferenceDate() && w.issued_on < setup.GetEndDate()).ToList();
 
             return new VATReceived
             {
@@ -119,5 +117,6 @@ namespace Taxer.FakturoidAdapter
                 TaxL = Decimal.Round(expenses.GetVAT(FakturoidExtensions.VAT_RATE_LOW), 0),
             };
         }
+
     }
 }

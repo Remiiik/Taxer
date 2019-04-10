@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Taxer.Core.Export;
 
 namespace Taxer.Functions
 {
@@ -11,7 +12,8 @@ namespace Taxer.Functions
                    ?? CheckParam(dto.AccountName, nameof(ExportDto.AccountName))
                    ?? CheckParam(dto.Login, nameof(ExportDto.Login))
                    ?? CheckParam(dto.Key, nameof(ExportDto.Key))
-                   ?? CheckParam(dto.Month, nameof(ExportDto.Month), i => i >= 1 && i <= 12)
+                   ?? CheckParam(dto.Month, nameof(ExportDto.Month), i => dto.Quarter.HasValue || (i.HasValue && i >= 1 && i <= 12))
+                   ?? CheckParam(dto.Quarter, nameof(ExportDto.Quarter), i => dto.Month.HasValue || (i.HasValue && i >= 1 && i <= 4))
                    ?? CheckParam(dto.Year, nameof(ExportDto.Year), i => i >= 2000 && i <= 2030);
         }
 

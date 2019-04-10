@@ -14,13 +14,13 @@ namespace Taxer.Functions
 {
     public static class KHReports
     {
-        [FunctionName("KHMonthReportPost")]
-        public static async Task<IActionResult> KHMonthReportPost([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "KHMonthReportPost")]HttpRequest req, TraceWriter log)
+        [FunctionName("KHReportPost")]
+        public static async Task<IActionResult> KHReportPost([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "KHReportPost")]HttpRequest req, TraceWriter log)
         {
             var bodyString = await req.ReadAsStringAsync();
             var dto = JsonConvert.DeserializeObject<ExportDto>(bodyString);
 
-            return GetMonthReport(dto, log);
+            return GetReport(dto, log);
         }
 
 
@@ -36,7 +36,7 @@ namespace Taxer.Functions
             int month,
             TraceWriter log)
         {
-            return GetMonthReport(new ExportDto
+            return GetReport(new ExportDto
             {
                 Key = key,
                 AccountName = accountName,
@@ -48,7 +48,31 @@ namespace Taxer.Functions
             }, log);
         }
 
-        private static IActionResult GetMonthReport(ExportDto exportDto, TraceWriter log)
+        [FunctionName("KHQuarterReportGet")]
+        public static IActionResult KHQuarterReportGet(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route =
+                "KHQuarterReportGet/key/{key}/accountname/{accountname}/login/{login}/year/{year}/quarter/{quarter}")]
+            HttpRequest req,
+            string key,
+            string accountName,
+            string login,
+            int year,
+            int quarter,
+            TraceWriter log)
+        {
+            return GetReport(new ExportDto
+            {
+                Key = key,
+                AccountName = accountName,
+                Login = login,
+                Year = year,
+                Quarter = quarter,
+                OfficeDepartmentId = 3002,
+                OfficeNo = 461
+            }, log);
+        }
+
+        private static IActionResult GetReport(ExportDto exportDto, TraceWriter log)
         {
 
             log.Info("Function started");
@@ -60,7 +84,9 @@ namespace Taxer.Functions
             var setup = new ExportSetup()
             {
                 Year = exportDto.Year,
-                Month = exportDto.Month,
+                Period = exportDto.Quarter ?? exportDto.Month.GetValueOrDefault(),
+                ExportMode = exportDto.Quarter.HasValue ? ExportMode.Quarter : ExportMode.Month,
+
                 OfficeDepartmentNo = exportDto.OfficeDepartmentId.ToString(),
                 OfficeNo = exportDto.OfficeNo.ToString()
             };

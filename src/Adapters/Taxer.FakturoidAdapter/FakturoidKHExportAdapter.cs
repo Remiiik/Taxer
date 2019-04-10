@@ -61,7 +61,8 @@ namespace Taxer.FakturoidAdapter
             return new KHPeriodInfo
             {
                 ExportDate = DateTime.Now.Date.ToString("dd.MM.yyyy"),
-                Month = setup.Month,
+                Month = setup.ExportMode == ExportMode.Month ? new int?(setup.Period) : null,
+                Quarter = setup.ExportMode == ExportMode.Quarter ? new int?(setup.Period) : null,
                 Year = setup.Year,
             };
         }
@@ -88,8 +89,7 @@ namespace Taxer.FakturoidAdapter
 
         private List<KHInvoice> CreateInvoices(FakturoidContext context, ExportSetup setup)
         {
-            var referenceDate = new DateTime(setup.Year, setup.Month, 1);
-            var invoices = context.Invoices.Select().Where(w => w.issued_on >= referenceDate && w.issued_on < referenceDate.AddMonths(1));
+            var invoices = context.Invoices.Select().Where(w => w.issued_on >= setup.GetReferenceDate() && w.issued_on < setup.GetEndDate());
 
             return invoices.Select(s => new KHInvoice
             {
@@ -105,9 +105,7 @@ namespace Taxer.FakturoidAdapter
 
         private List<KHInvoicedExpense> CreateInvoicedExpenses(FakturoidContext context, ExportSetup setup)
         {
-            var referenceDate = new DateTime(setup.Year, setup.Month, 1);
-
-            var expenses = context.Expenses.Select().Where(w => w.issued_on >= referenceDate && w.issued_on < referenceDate.AddMonths(1) && w.total > 10000);
+            var expenses = context.Expenses.Select().Where(w => w.issued_on >= setup.GetReferenceDate() && w.issued_on < setup.GetEndDate() && w.total > 10000).ToList();
 
             
             return expenses.Select(s => new KHInvoicedExpense
@@ -121,9 +119,7 @@ namespace Taxer.FakturoidAdapter
 
         private KHSmallExpenses CreateSummedExpense(FakturoidContext context, ExportSetup setup)
         {
-            var referenceDate = new DateTime(setup.Year, setup.Month, 1);
-
-            var expenses = context.Expenses.Select().Where(w => w.issued_on >= referenceDate && w.issued_on < referenceDate.AddMonths(1) && w.total < 10000);
+            var expenses = context.Expenses.Select().Where(w => w.issued_on >= setup.GetReferenceDate() && w.issued_on < setup.GetEndDate() && w.total < 10000).ToList();
 
             return new KHSmallExpenses
             {

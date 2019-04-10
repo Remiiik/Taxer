@@ -13,13 +13,13 @@ namespace Taxer.Functions
 {
     public static class VATReports
     {
-        [FunctionName("VATMonthReportPost")]
-        public static async Task<IActionResult> VATMonthReportPost([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "VATMonthReportPost")]HttpRequest req, TraceWriter log)
+        [FunctionName("VATReportPost")]
+        public static async Task<IActionResult> VATReportPost([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "VATReportPost")]HttpRequest req, TraceWriter log)
         {
             var bodyString = await req.ReadAsStringAsync();
             var dto = JsonConvert.DeserializeObject<ExportDto>(bodyString);
 
-            return GetMonthReport(dto, log);
+            return GetReport(dto, log);
         }
 
 
@@ -35,7 +35,7 @@ namespace Taxer.Functions
             int month,
             TraceWriter log)
         {
-            return GetMonthReport(new ExportDto
+            return GetReport(new ExportDto
             {
                 Key = key,
                 AccountName = accountName,
@@ -47,7 +47,31 @@ namespace Taxer.Functions
             }, log);
         }
 
-        private static IActionResult GetMonthReport(ExportDto exportDto, TraceWriter log)
+        [FunctionName("VATQuarterReportGet")]
+        public static IActionResult VATQuarterReportGet(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route =
+                "VATQuarterReportGet/key/{key}/accountname/{accountname}/login/{login}/year/{year}/quarter/{quarter}")]
+            HttpRequest req,
+            string key,
+            string accountName,
+            string login,
+            int year,
+            int quarter,
+            TraceWriter log)
+        {
+            return GetReport(new ExportDto
+            {
+                Key = key,
+                AccountName = accountName,
+                Login = login,
+                Year = year,
+                Quarter = quarter,
+                OfficeDepartmentId = 3002,
+                OfficeNo = 461
+            }, log);
+        }
+
+        private static IActionResult GetReport(ExportDto exportDto, TraceWriter log)
         {
 
             log.Info("Function started");
@@ -59,9 +83,11 @@ namespace Taxer.Functions
             var setup = new ExportSetup()
             {
                 Year = exportDto.Year,
-                Month = exportDto.Month,
+                Period = exportDto.Quarter ?? exportDto.Month.GetValueOrDefault(),
+                ExportMode = exportDto.Quarter.HasValue ? ExportMode.Quarter : ExportMode.Month,
+
                 OfficeDepartmentNo = exportDto.OfficeDepartmentId.ToString(),
-                OfficeNo = exportDto.OfficeNo.ToString()
+                OfficeNo = exportDto.OfficeNo.ToString(),
             };
 
             var connectConfig = new FakturoidConfiguration()

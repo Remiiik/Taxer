@@ -14,7 +14,8 @@ namespace Taxer.Tests
             return new ExportSetup()
             {
                 Year = 2018,
-                Month = 4,
+                Period = 4,
+                ExportMode = ExportMode.Month,
                 OfficeNo = "461",
                 OfficeDepartmentNo = "3002"
             };
